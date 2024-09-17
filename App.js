@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './src/screens/Home';
 import Game from './src/screens/Game';
-import Win from './src/components/Result';
 
 export default function App() {
 
@@ -23,10 +22,6 @@ const Tab = () => {
         <Stack.Screen
           name='Game'
           component={Game}
-        />
-        <Stack.Screen
-          name='Win'
-          component={Win}
         />
       </Stack.Navigator>
     </NavigationContainer>
