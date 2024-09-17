@@ -3,12 +3,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import Result from '../components/Result';
 
 const Game = () => {
-    const [ballPosition, setBallPosition] = useState(Math.floor(Math.random() * 3) + 1);
+    const [ballPosition, setBallPosition] = useState(Math.floor(Math.random() * 3));
     const [selectedCup, setSelectedCup] = useState(null);
     const [isShuffling, setIsShuffling] = useState(true);
 
     const [isWin, setIsWin] = useState(false);
-    const [showBall, setShowBall] = useState(true);
 
     const cup1ShuffleAnim = useRef(new Animated.Value(0)).current;
     const cup2ShuffleAnim = useRef(new Animated.Value(0)).current;
@@ -19,24 +18,24 @@ const Game = () => {
 
     useEffect(() => {
         shuffleCups();
-    }, []);   
+    }, []);
 
     const shuffleCups = () => {
         setIsShuffling(true);
         Animated.parallel([
             Animated.sequence([
-                Animated.timing(cup1ShuffleAnim, { toValue: Math.random() * 200 - 100, duration: 300, useNativeDriver: true }),
-                Animated.timing(cup1ShuffleAnim, { toValue: Math.random() * 200 - 100, duration: 300, useNativeDriver: true }),
+                Animated.timing(cup1ShuffleAnim, { toValue: Math.random() * 300 - 150, duration: 300, useNativeDriver: true }),
+                Animated.timing(cup1ShuffleAnim, { toValue: Math.random() * 300 - 150, duration: 300, useNativeDriver: true }),
                 Animated.timing(cup1ShuffleAnim, { toValue: 0, duration: 300, useNativeDriver: true }),
             ]),
             Animated.sequence([
-                Animated.timing(cup2ShuffleAnim, { toValue: Math.random() * 200 - 100, duration: 300, useNativeDriver: true }),
-                Animated.timing(cup2ShuffleAnim, { toValue: Math.random() * 200 - 100, duration: 300, useNativeDriver: true }),
+                Animated.timing(cup2ShuffleAnim, { toValue: Math.random() * 300 - 150, duration: 300, useNativeDriver: true }),
+                Animated.timing(cup2ShuffleAnim, { toValue: Math.random() * 300 - 150, duration: 300, useNativeDriver: true }),
                 Animated.timing(cup2ShuffleAnim, { toValue: 0, duration: 300, useNativeDriver: true }),
             ]),
             Animated.sequence([
-                Animated.timing(cup3ShuffleAnim, { toValue: Math.random() * 200 - 100, duration: 300, useNativeDriver: true }),
-                Animated.timing(cup3ShuffleAnim, { toValue: Math.random() * 200 - 100, duration: 300, useNativeDriver: true }),
+                Animated.timing(cup3ShuffleAnim, { toValue: Math.random() * 300 - 150, duration: 300, useNativeDriver: true }),
+                Animated.timing(cup3ShuffleAnim, { toValue: Math.random() * 300 - 150, duration: 300, useNativeDriver: true }),
                 Animated.timing(cup3ShuffleAnim, { toValue: 0, duration: 300, useNativeDriver: true }),
             ]),
         ]).start(() => setIsShuffling(false));
@@ -54,23 +53,19 @@ const Game = () => {
         liftAnimation.start();
     };
 
-    const handleCupPress = (index) => {
+    const handleCupPress = (index, isBallHere) => {
         if (isShuffling || selectedCup !== null) return;
         setSelectedCup(index);
         liftCup(index);
-        if (index === ballPosition) {
-            setIsWin(true);
-        } else {
-            setIsWin(false);
-        }
+        setIsWin(isBallHere);
     };
 
     const handlePlayAgain = () => {
         setSelectedCup(null);
         setIsWin(false);
-        setBallPosition(Math.floor(Math.random() * 3)+1);
+        setBallPosition(Math.floor(Math.random() * 3));
         shuffleCups();
-      };
+    };
 
     const data = [
         { id: 1, image: require('../../assets/plastic-cup.png') },
@@ -91,7 +86,7 @@ const Game = () => {
 
                     return (
                         <View key={item?.id} style={{ alignItems: 'center' }}>
-                            <TouchableOpacity onPress={() => handleCupPress(index)}>
+                            <TouchableOpacity onPress={() => handleCupPress(index, isBallHere)}>
                                 <Animated.View style={animatedStyle}>
                                     <Image
                                         source={item?.image}
